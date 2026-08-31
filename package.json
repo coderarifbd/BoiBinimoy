@@ -1,12 +1,13 @@
 {
-  "name": "temp_app",
-  "version": "0.1.0",
+  "name": "boibinimoy",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "6.4.1",
