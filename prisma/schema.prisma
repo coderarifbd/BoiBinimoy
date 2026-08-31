@@ -108,6 +108,7 @@ model ChatMessage {
   offerAmount Float?
   offerStatus String?   // PENDING, ACCEPTED, DECLINED
   meetupSpot  String?
+  isRead      Boolean   @default(false)
 
   createdAt   DateTime  @default(now())
 }

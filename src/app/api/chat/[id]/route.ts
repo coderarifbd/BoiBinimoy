@@ -67,10 +67,17 @@ export async function GET(
       return NextResponse.json({ error: "চ্যাটরুম পাওয়া যায়নি" }, { status: 404 });
     }
 
-    // Ensure only the buyer or seller (or Super Admin) can read messages
-    if (room.buyerId !== user.id && room.sellerId !== user.id && !user.isSuperAdmin) {
-      return NextResponse.json({ error: "অননুমোদিত এক্সেস" }, { status: 403 });
-    }
+    // Mark all unread messages from the other person as read
+    await prisma.chatMessage.updateMany({
+      where: {
+        roomId: id,
+        senderId: { not: user.id },
+        isRead: false,
+      },
+      data: {
+        isRead: true,
+      },
+    });
 
     return NextResponse.json({ room });
   } catch (error) {

@@ -24,6 +24,31 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+
+  // Poll for unread message count
+  React.useEffect(() => {
+    if (!user) {
+      setUnreadCount(0);
+      return;
+    }
+
+    const fetchUnread = async () => {
+      try {
+        const res = await fetch("/api/chat/unread-count");
+        if (res.ok) {
+          const data = await res.json();
+          setUnreadCount(data.unreadCount || 0);
+        }
+      } catch (err) {
+        // ignore silently
+      }
+    };
+
+    fetchUnread();
+    const timer = setInterval(fetchUnread, 4000);
+    return () => clearInterval(timer);
+  }, [user, pathname]);
 
   const isActive = (path: string) => pathname === path;
 
@@ -118,10 +143,10 @@ export default function Navbar() {
 
             {user ? (
               <div className="flex items-center gap-2">
-                {/* Chat Inbox Icon */}
+                {/* Chat Inbox Icon with Unread Count Badge */}
                 <Link
                   href="/chat"
-                  className={`p-2.5 rounded-xl border transition-colors relative ${
+                  className={`p-2.5 rounded-xl border transition-colors relative flex items-center justify-center ${
                     pathname.startsWith("/chat")
                       ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                       : "border-slate-200 text-slate-600 hover:bg-slate-50"
@@ -129,7 +154,13 @@ export default function Navbar() {
                   title="ইনবক্স ও চ্যাট"
                 >
                   <MessageCircle className="w-5 h-5" />
-                  <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white"></span>
+                  {unreadCount > 0 ? (
+                    <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 bg-rose-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-md animate-pulse">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  ) : (
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-white"></span>
+                  )}
                 </Link>
 
                 {/* User Dropdown */}
@@ -277,10 +308,17 @@ export default function Navbar() {
                 <Link
                   href="/chat"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-emerald-50"
+                  className="flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-emerald-50"
                 >
-                  <MessageCircle className="w-4 h-4 text-emerald-600" />
-                  ইনবক্স ও চ্যাট
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4 text-emerald-600" />
+                    <span>ইনবক্স ও চ্যাট</span>
+                  </div>
+                  {unreadCount > 0 && (
+                    <span className="px-2 py-0.5 text-xs font-black bg-rose-600 text-white rounded-full">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
                 </Link>
               </>
             )}
