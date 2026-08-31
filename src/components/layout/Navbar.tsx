@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useChatWidget } from "@/context/ChatWidgetContext";
 import {
   BookOpen,
   MapPin,
@@ -17,38 +18,120 @@ import {
   X,
   Library,
   Search,
+  ArrowRight,
+  Sparkles,
+  ExternalLink,
 } from "lucide-react";
+
+interface MiniChatRoom {
+  id: string;
+  book?: {
+    id: string;
+    title: string;
+    images: string[];
+    price: number;
+    dealType: string;
+  } | null;
+  buyer: { id: string; name: string };
+  seller: { id: string; name: string };
+  messages: Array<{ id: string; content: string; createdAt: string }>;
+  hasUnread?: boolean;
+  unreadCount?: number;
+  updatedAt: string;
+}
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { openChat } = useChatWidget();
   const pathname = usePathname();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [chatDropdownOpen, setChatDropdownOpen] = useState(false);
+
   const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [recentRooms, setRecentRooms] = useState<MiniChatRoom[]>([]);
+  const [loadingRooms, setLoadingRooms] = useState(false);
+
+  const chatDropdownRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   // Poll for unread message count
-  React.useEffect(() => {
+  const fetchUnreadAndRooms = async () => {
     if (!user) {
       setUnreadCount(0);
       return;
     }
 
-    const fetchUnread = async () => {
-      try {
-        const res = await fetch("/api/chat/unread-count");
-        if (res.ok) {
-          const data = await res.json();
-          setUnreadCount(data.unreadCount || 0);
-        }
-      } catch (err) {
-        // ignore silently
+    try {
+      const res = await fetch("/api/chat/unread-count");
+      if (res.ok) {
+        const data = await res.json();
+        setUnreadCount(data.unreadCount || 0);
       }
-    };
+    } catch (err) {
+      // ignore silently
+    }
+  };
 
-    fetchUnread();
-    const timer = setInterval(fetchUnread, 4000);
+  const fetchRecentChats = async () => {
+    if (!user) return;
+    setLoadingRooms(true);
+    try {
+      const res = await fetch("/api/chat");
+      if (res.ok) {
+        const data = await res.json();
+        setRecentRooms(data.rooms || []);
+      }
+    } catch (err) {
+      // ignore
+    } finally {
+      setLoadingRooms(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUnreadAndRooms();
+    const timer = setInterval(fetchUnreadAndRooms, 4000);
     return () => clearInterval(timer);
   }, [user, pathname]);
+
+  // Click outside to close dropdowns
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (chatDropdownRef.current && !chatDropdownRef.current.contains(event.target as Node)) {
+        setChatDropdownOpen(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setUserDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleToggleChatDropdown = () => {
+    if (!chatDropdownOpen) {
+      fetchRecentChats();
+    }
+    setChatDropdownOpen(!chatDropdownOpen);
+  };
+
+  const handleOpenFloatingChat = (room: MiniChatRoom) => {
+    const isBuyer = room.buyer?.id === user?.id;
+    const otherUser = isBuyer ? room.seller : room.buyer;
+
+    openChat({
+      roomId: room.id,
+      bookId: room.book?.id,
+      sellerName: otherUser?.name || "ব্যবহারকারী",
+      bookTitle: room.book?.title,
+      bookPrice: room.book?.price,
+      bookImage: room.book?.images?.[0],
+    });
+
+    setChatDropdownOpen(false);
+  };
 
   const isActive = (path: string) => pathname === path;
 
@@ -143,26 +226,144 @@ export default function Navbar() {
 
             {user ? (
               <div className="flex items-center gap-2">
-                {/* Chat Inbox Icon with Unread Count Badge */}
-                <Link
-                  href="/chat"
-                  className={`p-2.5 rounded-xl border transition-colors relative flex items-center justify-center ${
-                    pathname.startsWith("/chat")
-                      ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                      : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  }`}
-                  title="ইনবক্স ও চ্যাট"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  {unreadCount > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 bg-rose-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-md animate-pulse">
-                      {unreadCount > 9 ? "9+" : unreadCount}
-                    </span>
+                {/* 💬 FACEBOOK-STYLE MESSENGER CHAT DROPDOWN */}
+                <div ref={chatDropdownRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={handleToggleChatDropdown}
+                    className={`p-2.5 rounded-xl border transition-colors relative flex items-center justify-center cursor-pointer ${
+                      chatDropdownOpen || pathname.startsWith("/chat")
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                        : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                    }`}
+                    title="মেসেঞ্জার ও চ্যাট"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 bg-rose-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-md animate-pulse">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Dropdown Popup */}
+                  {chatDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-slate-200 py-3 z-50 animate-in fade-in slide-in-from-top-2">
+                      <div className="px-4 pb-2.5 border-b border-slate-100 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-black text-slate-900 text-sm">মেসেজ ও ইনবক্স</h3>
+                          {unreadCount > 0 && (
+                            <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-bold rounded-full">
+                              {unreadCount} টি নতুন
+                            </span>
+                          )}
+                        </div>
+                        <Link
+                          href="/chat"
+                          onClick={() => setChatDropdownOpen(false)}
+                          className="text-[11px] font-bold text-emerald-700 hover:underline"
+                        >
+                          ইনবক্স পেজ
+                        </Link>
+                      </div>
+
+                      {/* Chats List */}
+                      <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+                        {loadingRooms ? (
+                          <div className="py-8 text-center text-slate-400">
+                            <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
+                            <span className="text-xs">লোড হচ্ছে...</span>
+                          </div>
+                        ) : recentRooms.length === 0 ? (
+                          <div className="py-8 text-center space-y-1">
+                            <MessageCircle className="w-8 h-8 text-slate-300 mx-auto" />
+                            <p className="text-xs text-slate-500 font-medium">কোনো চ্যাট মেসেজ নেই</p>
+                          </div>
+                        ) : (
+                          recentRooms.map((room) => {
+                            const isBuyer = room.buyer?.id === user?.id;
+                            const otherUser = isBuyer ? room.seller : room.buyer;
+                            const lastMsg = room.messages?.[0];
+                            const isUnread = !!room.hasUnread;
+
+                            return (
+                              <div
+                                key={room.id}
+                                onClick={() => handleOpenFloatingChat(room)}
+                                className={`p-3 flex items-center gap-3 hover:bg-slate-50 cursor-pointer transition-colors ${
+                                  isUnread ? "bg-emerald-50/70" : ""
+                                }`}
+                              >
+                                <div className="relative shrink-0">
+                                  {room.book?.images?.[0] ? (
+                                    <img
+                                      src={room.book.images[0]}
+                                      alt="Book"
+                                      className="w-10 h-12 object-cover rounded-lg border border-slate-200"
+                                    />
+                                  ) : (
+                                    <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs">
+                                      {otherUser?.name?.slice(0, 1) || "U"}
+                                    </div>
+                                  )}
+                                  {isUnread && (
+                                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-rose-600 border-2 border-white rounded-full"></span>
+                                  )}
+                                </div>
+
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-1 mb-0.5">
+                                    <span
+                                      className={`text-xs truncate ${
+                                        isUnread ? "font-black text-slate-950" : "font-bold text-slate-800"
+                                      }`}
+                                    >
+                                      {otherUser?.name}
+                                    </span>
+                                    <span className="text-[10px] text-slate-400 shrink-0">
+                                      {new Date(room.updatedAt).toLocaleTimeString("bn-BD", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })}
+                                    </span>
+                                  </div>
+
+                                  {room.book && (
+                                    <p className="text-[11px] text-emerald-700 font-semibold truncate mb-0.5">
+                                      📖 {room.book.title}
+                                    </p>
+                                  )}
+
+                                  <p
+                                    className={`text-[11px] truncate ${
+                                      isUnread ? "font-bold text-slate-900" : "text-slate-500"
+                                    }`}
+                                  >
+                                    {lastMsg?.content || "নতুন কনভার্সেশন..."}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+
+                      {/* Footer */}
+                      <div className="p-2 border-t border-slate-100 text-center">
+                        <Link
+                          href="/chat"
+                          onClick={() => setChatDropdownOpen(false)}
+                          className="w-full block py-1.5 text-xs font-bold text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors"
+                        >
+                          সব মেসেজ দেখুন (ইনবক্স) →
+                        </Link>
+                      </div>
+                    </div>
                   )}
-                </Link>
+                </div>
 
                 {/* User Dropdown */}
-                <div className="relative">
+                <div ref={userDropdownRef} className="relative">
                   <button
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                     className="flex items-center gap-2 p-1.5 pl-2 pr-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-slate-50 transition-colors"
@@ -212,22 +413,22 @@ export default function Navbar() {
                       {user.isSuperAdmin && (
                         <Link
                           href="/admin"
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-rose-700 font-semibold hover:bg-rose-50"
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-rose-700 hover:bg-rose-50"
                         >
                           <ShieldAlert className="w-4 h-4 text-rose-600" />
-                          সুপার অ্যাডমিন ড্যাশবোর্ড
+                          অ্যাডমিন ড্যাশবোর্ড
                         </Link>
                       )}
 
-                      <div className="border-t border-slate-100 mt-1">
-                        <button
-                          onClick={() => logout()}
-                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 text-left"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          লগআউট
-                        </button>
-                      </div>
+                      <div className="border-t border-slate-100 my-1"></div>
+
+                      <button
+                        onClick={logout}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        লগআউট
+                      </button>
                     </div>
                   )}
                 </div>
@@ -236,15 +437,15 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="px-3.5 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors"
+                  className="px-4 py-2 text-sm font-bold text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors"
                 >
                   লগইন
                 </Link>
                 <Link
                   href="/register"
-                  className="hidden sm:inline-block px-3.5 py-2 text-sm font-bold bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-colors shadow-xs"
+                  className="px-4 py-2 text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-xs transition-colors"
                 >
-                  সাইন-আপ
+                  সাইন আপ
                 </Link>
               </div>
             )}

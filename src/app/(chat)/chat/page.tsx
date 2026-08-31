@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { useChatWidget } from "@/context/ChatWidgetContext";
 import {
   MessageCircle,
   BookOpen,
@@ -13,6 +14,7 @@ import {
   ArrowRight,
   Sparkles,
   BellRing,
+  ExternalLink,
 } from "lucide-react";
 
 interface ChatRoomItem {
@@ -49,6 +51,7 @@ interface ChatRoomItem {
 
 export default function ChatInboxPage() {
   const { user } = useAuth();
+  const { openChat } = useChatWidget();
   const [rooms, setRooms] = useState<ChatRoomItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -65,10 +68,23 @@ export default function ChatInboxPage() {
 
   useEffect(() => {
     fetchInbox();
-    // Poll every 3 seconds for live unread updates
     const interval = setInterval(fetchInbox, 3000);
     return () => clearInterval(interval);
   }, [user]);
+
+  const handleOpenRoomInWidget = (room: ChatRoomItem) => {
+    const isBuyer = room.buyer?.id === user?.id;
+    const otherUser = isBuyer ? room.seller : room.buyer;
+
+    openChat({
+      roomId: room.id,
+      bookId: room.book?.id,
+      sellerName: otherUser?.name || "ব্যবহারকারী",
+      bookTitle: room.book?.title,
+      bookPrice: room.book?.price,
+      bookImage: room.book?.images?.[0],
+    });
+  };
 
   if (!user && !loading) {
     return (
@@ -96,7 +112,7 @@ export default function ChatInboxPage() {
             <span>অ্যাক্টিভ ইনবক্স ও চ্যাট</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            সকল ক্রেতা ও বিক্রেতার সাথে চলমান যোগাযোগ ও অফার
+            যে কোনো চ্যাটে ক্লিক করে নিচে ডানপাশের মেসেঞ্জারে সরাসরি কথা বলুন
           </p>
         </div>
 
@@ -142,10 +158,10 @@ export default function ChatInboxPage() {
             const isUnread = !!room.hasUnread;
 
             return (
-              <Link
+              <div
                 key={room.id}
-                href={`/chat/${room.id}`}
-                className={`rounded-2xl p-4 flex items-center justify-between gap-4 transition-all group ${
+                onClick={() => handleOpenRoomInWidget(room)}
+                className={`rounded-2xl p-4 flex items-center justify-between gap-4 transition-all cursor-pointer group ${
                   isUnread
                     ? "bg-emerald-50/90 border-2 border-emerald-500 shadow-md ring-2 ring-emerald-400/20"
                     : "bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-md"
@@ -241,16 +257,16 @@ export default function ChatInboxPage() {
 
                   {isUnread ? (
                     <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors">
-                      <span>পড়ুন</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>চ্যাট খুলুন</span>
                     </div>
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-slate-50 group-hover:bg-emerald-50 text-slate-400 group-hover:text-emerald-700 flex items-center justify-center transition-colors">
-                      <ArrowRight className="w-4 h-4" />
+                      <MessageCircle className="w-4 h-4" />
                     </div>
                   )}
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
