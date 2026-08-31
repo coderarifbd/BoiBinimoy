@@ -41,6 +41,8 @@ interface ChatRoomItem {
     content: string;
     createdAt: string;
   }>;
+  hasUnread?: boolean;
+  unreadCount?: number;
 }
 
 export default function ChatInboxPage() {
@@ -168,9 +170,15 @@ export default function ChatInboxPage() {
                       minute: "2-digit",
                     })}
                   </span>
-                  <div className="w-7 h-7 rounded-full bg-slate-50 group-hover:bg-emerald-50 text-slate-400 group-hover:text-emerald-700 flex items-center justify-center transition-colors">
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </div>
+                  {room.hasUnread ? (
+                    <span className="px-2 py-0.5 bg-rose-600 text-white text-[10px] font-black rounded-full shadow-xs animate-pulse">
+                      {(room.unreadCount ?? 0) > 1 ? `${room.unreadCount} টি নতুন` : "নতুন মেসেজ"}
+                    </span>
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-slate-50 group-hover:bg-emerald-50 text-slate-400 group-hover:text-emerald-700 flex items-center justify-center transition-colors">
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </div>
+                  )}
                 </div>
               </Link>
             );

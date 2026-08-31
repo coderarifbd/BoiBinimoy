@@ -11,8 +11,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ unreadCount: 0 });
     }
 
-    // Find all chat rooms where the user is either buyer or seller
-    const unreadCount = await prisma.chatMessage.count({
+    // Find all distinct chat rooms where there is at least one unread message sent by the other party
+    const unreadMessages = await prisma.chatMessage.findMany({
       where: {
         room: {
           OR: [{ buyerId: user.id }, { sellerId: user.id }],
@@ -20,7 +20,13 @@ export async function GET(req: NextRequest) {
         senderId: { not: user.id },
         isRead: false,
       },
+      select: {
+        roomId: true,
+      },
+      distinct: ["roomId"],
     });
+
+    const unreadCount = unreadMessages.length;
 
     return NextResponse.json({ unreadCount });
   } catch (error) {

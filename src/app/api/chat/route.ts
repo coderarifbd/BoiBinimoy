@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const user = await getCurrentUser();
@@ -48,7 +50,25 @@ export async function GET() {
       orderBy: { updatedAt: "desc" },
     });
 
-    return NextResponse.json({ rooms });
+    // Count unread messages for each room
+    const roomsWithUnread = await Promise.all(
+      rooms.map(async (room) => {
+        const unreadCount = await prisma.chatMessage.count({
+          where: {
+            roomId: room.id,
+            senderId: { not: user.id },
+            isRead: false,
+          },
+        });
+        return {
+          ...room,
+          hasUnread: unreadCount > 0,
+          unreadCount,
+        };
+      })
+    );
+
+    return NextResponse.json({ rooms: roomsWithUnread });
   } catch (error) {
     console.error("Fetch chats error:", error);
     return NextResponse.json({ error: "চ্যাট তালিকা লোড করা যায়নি" }, { status: 500 });
