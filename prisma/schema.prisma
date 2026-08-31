@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  image         String?
+  phone         String?
+  role          String    @default("USER") // USER | SUPER_ADMIN
+  points        Int       @default(0)
+  referralCode  String    @unique
+  referredById  String?
+  referredBy    User?     @relation("UserReferrals", fields: [referredById], references: [id])
+  referralsMade User[]    @relation("UserReferrals")
+  
+  isBanned      Boolean   @default(false)
+  latitude      Float?    @default(23.726)
+  longitude     Float?    @default(90.398)
+  locationName  String?   @default("ঢাকা বিশ্ববিদ্যালয় (DU)")
+
+  books         Book[]
+  bookRequests  BookRequest[]
+  buyerRooms    ChatRoom[]        @relation("BuyerRooms")
+  sellerRooms   ChatRoom[]        @relation("SellerRooms")
+  sentMessages  ChatMessage[]     @relation("SentMessages")
+  withdrawals   WithdrawalRequest[]
+  referralLogs  ReferralRecord[]  @relation("ReferrerUser")
+  referredLog   ReferralRecord[]  @relation("ReferredFriend")
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Book {
+  id             String     @id @default(cuid())
+  title          String
+  author         String
+  category       String     // ACADEMIC_ENG, ACADEMIC_MED, ACADEMIC_COLLEGE, BCS_JOB, FICTION, NON_FICTION, OTHER
+  condition      String     // NEW, LIKE_NEW, GOOD, ACCEPTABLE
+  dealType       String     // SELL, SWAP, GIVEAWAY
+  price          Float      @default(0)
+  images         String[]
+  status         String     @default("AVAILABLE") // AVAILABLE, SOLD, REMOVED
+  
+  latitude       Float?
+  longitude      Float?
+  approxLocation String?
+  
+  userId         String
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatRooms      ChatRoom[]
+
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model BookRequest {
+  id             String   @id @default(cuid())
+  title          String
+  author         String?
+  category       String
+  description    String?
+  approxLocation String?
+  latitude       Float?
+  longitude      Float?
+  status         String   @default("OPEN") // OPEN, FULFILLED
+
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model ChatRoom {
+  id        String        @id @default(cuid())
+  bookId    String?
+  book      Book?         @relation(fields: [bookId], references: [id], onDelete: SetNull)
+  buyerId   String
+  buyer     User          @relation("BuyerRooms", fields: [buyerId], references: [id], onDelete: Cascade)
+  sellerId  String
+  seller    User          @relation("SellerRooms", fields: [sellerId], references: [id], onDelete: Cascade)
+  
+  messages  ChatMessage[]
+
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ChatMessage {
+  id          String    @id @default(cuid())
+  roomId      String
+  room        ChatRoom  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  senderId    String
+  sender      User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  
+  content     String
+  image       String?
+  isOffer     Boolean   @default(false)
+  offerAmount Float?
+  offerStatus String?   // PENDING, ACCEPTED, DECLINED
+  meetupSpot  String?
+
+  createdAt   DateTime  @default(now())
+}
+
+model ReferralRecord {
+  id              String   @id @default(cuid())
+  referrerId      String
+  referrer        User     @relation("ReferrerUser", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredUserId  String
+  referredUser    User     @relation("ReferredFriend", fields: [referredUserId], references: [id], onDelete: Cascade)
+  
+  hasListedBook   Boolean  @default(false)
+  pointsAwarded   Int      @default(0)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model WithdrawalRequest {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  pointsDeducted Int      @default(1000)
+  amount         Float    @default(50)
+  method         String   // BKASH, NAGAD, RECHARGE
+  accountNumber  String
+  status         String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  adminNote      String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
