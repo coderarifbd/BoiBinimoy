@@ -20,12 +20,17 @@ export default function Footer() {
           {/* Brand col */}
           <div className="space-y-4 md:col-span-1">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-bold">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-bold shrink-0">
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white tracking-tight">
-                BoiBinimoy
-              </span>
+              <div className="flex flex-col">
+                <span className="text-xl font-black text-white tracking-tight leading-none">
+                  BoiBinimoy
+                </span>
+                <span className="text-[11px] font-bold text-emerald-400 tracking-wider mt-0.5 leading-none">
+                  বইবিনিময়
+                </span>
+              </div>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
               বাংলাদেশের প্রথম হাইপার-লোকাল বই শেয়ারিং, সেল ও সোয়াপিং প্ল্যাটফর্ম। নিজের আশেপাশের শিক্ষার্থীদের সাথে সহজে বই বিনিময় করুন।
