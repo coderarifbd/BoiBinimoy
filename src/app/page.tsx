@@ -51,15 +51,15 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen space-y-16 pb-20 transition-colors">
-      {/* 1. ULTRA-CLEAN EYE-FRIENDLY HERO SECTION */}
-      <section className="relative pt-12 sm:pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Soft Ambient Background Glows */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-emerald-500/10 via-teal-500/5 to-transparent pointer-events-none rounded-b-[4rem]"></div>
+      {/* 1. SEAMLESS CLEAN HERO SECTION */}
+      <section className="relative pt-12 sm:pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-emerald-500/5 via-teal-500/5 to-transparent dark:from-emerald-950/25 dark:via-slate-900/10 dark:to-transparent border-b border-slate-200/50 dark:border-slate-800/60">
+        {/* Subtle Ambient Radial Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-emerald-500/10 dark:bg-emerald-500/15 blur-[120px] pointer-events-none rounded-full"></div>
 
         <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold border border-emerald-200/80 dark:border-emerald-800/80 shadow-2xs">
+            <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>বাংলাদেশের প্রথম হাইপার-লোকাল বই শেয়ারিং প্ল্যাটফর্ম</span>
           </div>
 
@@ -71,7 +71,7 @@ export default async function HomePage() {
             </span>
           </h1>
 
-          {/* Subtitle - Increased Font for Comfortable Reading */}
+          {/* Subtitle */}
           <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
             জিরো কমিশন ও কোনো মধ্যস্বত্বভোগী ছাড়া সরাসরি আশেপাশের শিক্ষার্থীদের সাথে ইন-অ্যাপ মেসেঞ্জারে কথা বলে বই হাতবদল করুন।
           </p>
@@ -81,7 +81,7 @@ export default async function HomePage() {
             <form
               action="/explore"
               method="GET"
-              className="bg-white dark:bg-slate-900 p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-black/40 flex flex-col sm:flex-row items-center gap-2 hover:border-emerald-400 dark:hover:border-emerald-500/60 transition-all"
+              className="bg-white dark:bg-slate-900/95 p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-black/50 flex flex-col sm:flex-row items-center gap-2 hover:border-emerald-400 dark:hover:border-emerald-500/60 transition-all backdrop-blur-md"
             >
               <div className="flex items-center gap-2.5 flex-1 w-full px-3 py-1 sm:py-0">
                 <Search className="w-5 h-5 text-slate-400 dark:text-slate-500 shrink-0" />
