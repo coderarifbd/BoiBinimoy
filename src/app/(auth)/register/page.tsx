@@ -131,18 +131,18 @@ function RegisterForm() {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 shadow-xl shadow-slate-200/50 space-y-6">
+    <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-6 transition-colors">
       <div className="text-center space-y-2">
         <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white mx-auto shadow-md shadow-emerald-500/20">
           <BookOpen className="w-6 h-6" />
         </div>
-        <h1 className="text-2xl font-black text-slate-900">অ্যাকাউন্ট খুলুন</h1>
-        <p className="text-xs text-slate-500">বই বিনিময় কমিউনিটিতে যোগ দিন</p>
+        <h1 className="text-2xl font-black text-slate-900 dark:text-white">অ্যাকাউন্ট খুলুন</h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400">বই বিনিময় কমিউনিটিতে যোগ দিন</p>
       </div>
 
       {refParam && (
-        <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-amber-900 text-xs flex items-center gap-2">
-          <Gift className="w-4 h-4 text-amber-600 shrink-0" />
+        <div className="p-3 bg-amber-50 dark:bg-amber-950/80 rounded-2xl border border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-300 text-xs flex items-center gap-2">
+          <Gift className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
           <span>
             আপনি বন্ধুর রেফারেল লিংক দিয়ে জয়েন করছেন! সাইন-আপের পর ১টি বই পোস্ট করুন।
           </span>
@@ -150,7 +150,7 @@ function RegisterForm() {
       )}
 
       {error && (
-        <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+        <div className="p-3 bg-rose-50 dark:bg-rose-950/80 border border-rose-200 dark:border-rose-900 rounded-xl text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -158,65 +158,73 @@ function RegisterForm() {
 
       <form onSubmit={handleSubmit} className="space-y-3.5">
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">পূর্ণ নাম *</label>
+          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+            পূর্ণ নাম *
+          </label>
           <input
             type="text"
             placeholder="যেমন: আরিফুল ইসলাম"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs outline-hidden focus:border-emerald-500"
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm outline-hidden focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
             required
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">ইমেইল *</label>
+          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+            ইমেইল *
+          </label>
           <input
             type="email"
             placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs outline-hidden focus:border-emerald-500"
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm outline-hidden focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
             required
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">পাসওয়ার্ড *</label>
+          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+            পাসওয়ার্ড *
+          </label>
           <input
             type="password"
             placeholder="কমপক্ষে ৬ ডিজিট"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs outline-hidden focus:border-emerald-500"
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm outline-hidden focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
             required
             minLength={6}
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">মোবাইল নম্বর</label>
+          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+            মোবাইল নম্বর
+          </label>
           <input
             type="tel"
             placeholder="017XXXXXXXX"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-hidden focus:border-emerald-500"
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm outline-hidden focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
           />
         </div>
 
         {/* DYNAMIC GPS & LOCATION SECTION */}
-        <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+        <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-2xl space-y-2.5">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-slate-800 flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+            <label className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               আপনার এলাকা / জেলা *
             </label>
             <button
               type="button"
               onClick={handleFetchGps}
               disabled={detectingGps}
-              className="px-2 py-0.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold flex items-center gap-1"
+              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
             >
               {detectingGps ? (
                 <div className="w-2.5 h-2.5 border border-white border-t-transparent rounded-full animate-spin"></div>
@@ -232,23 +240,23 @@ function RegisterForm() {
             placeholder="যেমন: বগুড়া সদর / মিরপুর ১০"
             value={locationName}
             onChange={(e) => setLocationName(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold bg-white outline-hidden focus:border-emerald-500"
+            className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-hidden focus:border-emerald-500"
             required
           />
 
           <div className="relative">
-            <Search className="w-3 h-3 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="যেকোনো জেলা/থানা লিখে সার্চ করুন..."
               value={locationSearchQuery}
               onChange={(e) => handleLocationSearch(e.target.value)}
-              className="w-full pl-7 pr-2 py-1.5 rounded-lg border border-slate-200 text-[11px] bg-white outline-hidden"
+              className="w-full pl-8 pr-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-[11px] bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-hidden"
             />
           </div>
 
           {locationSuggestions.length > 0 && (
-            <div className="space-y-1 bg-white border border-slate-200 rounded-xl p-1.5 max-h-32 overflow-y-auto">
+            <div className="space-y-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-1.5 max-h-32 overflow-y-auto">
               {locationSuggestions.map((item, idx) => (
                 <button
                   key={idx}
@@ -260,9 +268,9 @@ function RegisterForm() {
                     setLocationSearchQuery("");
                     setLocationSuggestions([]);
                   }}
-                  className="w-full text-left p-1 rounded-md hover:bg-emerald-50 text-[11px] text-slate-800 flex items-center gap-1 truncate"
+                  className="w-full text-left p-1.5 rounded-md hover:bg-emerald-50 dark:hover:bg-slate-700/60 text-[11px] text-slate-800 dark:text-slate-200 flex items-center gap-1.5 truncate cursor-pointer"
                 >
-                  <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
+                  <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span className="truncate">{item.name}</span>
                 </button>
               ))}
@@ -273,7 +281,7 @@ function RegisterForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all mt-2"
+          className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all mt-2 cursor-pointer"
         >
           {loading ? (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -286,10 +294,10 @@ function RegisterForm() {
         </button>
       </form>
 
-      <div className="text-center pt-2 border-t border-slate-100">
-        <p className="text-xs text-slate-500">
+      <div className="text-center pt-3 border-t border-slate-100 dark:border-slate-800">
+        <p className="text-xs text-slate-500 dark:text-slate-400">
           ইতিমধ্যে অ্যাকাউন্ট আছে?{" "}
-          <Link href="/login" className="font-bold text-emerald-700 hover:underline">
+          <Link href="/login" className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
             লগইন করুন
           </Link>
         </p>
