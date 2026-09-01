@@ -151,62 +151,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 2. HOW IT WORKS (৩টি সহজ ধাপ) */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-slate-900/90 rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-8">
-          <div className="text-center max-w-xl mx-auto space-y-1">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-              কীভাবে কাজ করে বইবিনিময়?
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              মাত্র ৩টি সহজ ধাপে বই আদান-প্রদান সম্পন্ন করুন
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Step 1 */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 space-y-3 relative group hover:bg-emerald-50/50 dark:hover:bg-slate-800 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-emerald-600/20">
-                ১
-              </div>
-              <h3 className="font-bold text-slate-900 dark:text-white text-base">
-                বই খুঁজুন বা পোস্ট করুন
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                আপনার এলাকার ১-১০ কিমির মধ্যে বই সার্চ করুন অথবা নিজের অপ্রয়োজনীয় বই মাত্র ১ মিনিটে পোস্ট করুন।
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 space-y-3 relative group hover:bg-emerald-50/50 dark:hover:bg-slate-800 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-teal-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-teal-600/20">
-                ২
-              </div>
-              <h3 className="font-bold text-slate-900 dark:text-white text-base">
-                মেসেঞ্জারে চ্যাট ও দরদাম
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                ব্যক্তিগত ফোন নম্বর ছাড়াই ইন-অ্যাপ চ্যাটে কথা বলুন, অফার পাঠান এবং দাম চূড়ান্ত করুন।
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 space-y-3 relative group hover:bg-emerald-50/50 dark:hover:bg-slate-800 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-amber-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-amber-600/20">
-                ৩
-              </div>
-              <h3 className="font-bold text-slate-900 dark:text-white text-base">
-                কাছের স্পটে নিরাপদ বিনিময়
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                ক্যাম্পাস বা নিকটস্থ পরিচিত পাবলিক স্পটে দেখা করে সরাসরি বই হাতবদল করুন।
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. RECENT BOOKS FEED */}
+      {/* 2. RECENT BOOKS FEED (Users see books right away!) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -289,7 +234,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 4. BOOK REQUESTS ("বইয়ের খোঁজ চাই") */}
+      {/* 3. BOOK REQUESTS ("বইয়ের খোঁজ চাই") */}
       {recentRequests.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-emerald-50/60 dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-emerald-200/60 dark:border-slate-800 space-y-6">
@@ -333,7 +278,62 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 5. CALL TO ACTION BANNER */}
+      {/* 4. HOW IT WORKS (৩টি সহজ ধাপ) - Right above CTA Section */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white dark:bg-slate-900/90 rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-8">
+          <div className="text-center max-w-xl mx-auto space-y-1">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              কীভাবে কাজ করে বইবিনিময়?
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              মাত্র ৩টি সহজ ধাপে বই আদান-প্রদান সম্পন্ন করুন
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Step 1 */}
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 space-y-3 relative group hover:bg-emerald-50/50 dark:hover:bg-slate-800 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-emerald-600/20">
+                ১
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                বই খুঁজুন বা পোস্ট করুন
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                আপনার এলাকার ১-১০ কিমির মধ্যে বই সার্চ করুন অথবা নিজের অপ্রয়োজনীয় বই মাত্র ১ মিনিটে পোস্ট করুন।
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 space-y-3 relative group hover:bg-emerald-50/50 dark:hover:bg-slate-800 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-teal-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-teal-600/20">
+                ২
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                মেসেঞ্জারে চ্যাট ও দরদাম
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                ব্যক্তিগত ফোন নম্বর ছাড়াই ইন-অ্যাপ চ্যাটে কথা বলুন, অফার পাঠান এবং দাম চূড়ান্ত করুন।
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 space-y-3 relative group hover:bg-emerald-50/50 dark:hover:bg-slate-800 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-amber-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-amber-600/20">
+                ৩
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                কাছের স্পটে নিরাপদ বিনিময়
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                ক্যাম্পাস বা নিকটস্থ পরিচিত পাবলিক স্পটে দেখা করে সরাসরি বই হাতবদল করুন।
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. CALL TO ACTION BANNER (Right before footer) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-emerald-700 via-teal-800 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-emerald-500/20">
           <div className="space-y-2 text-center md:text-left">
