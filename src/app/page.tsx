@@ -19,6 +19,9 @@ import {
   Repeat,
   Heart,
   TrendingUp,
+  CheckCircle2,
+  Users,
+  Zap,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -47,51 +50,53 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="space-y-16 pb-20 bg-slate-50">
-      {/* 1. CLEAN MODERN HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50/80 via-white to-slate-50 pt-12 sm:pt-16 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-200/60">
+    <div className="min-h-screen bg-[#fcfdfd] space-y-16 pb-20">
+      {/* 1. ULTRA-CLEAN MINIMAL HERO SECTION */}
+      <section className="relative pt-12 sm:pt-18 pb-14 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Soft Ambient Background Glows */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-emerald-100/40 via-teal-50/20 to-transparent pointer-events-none rounded-b-[4rem]"></div>
+
         <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100/80 text-emerald-800 text-xs font-bold border border-emerald-200 shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200/80 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>বাংলাদেশের প্রথম হাইপার-লোকাল বই শেয়ারিং প্ল্যাটফর্ম</span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.2]">
-            আপনার আশেপাশের পাঠকদের সাথে{" "}
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
+            আপনার ক্যাম্পাসে বই কিনুন,{" "}
             <span className="text-emerald-700 bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent">
-              বই বিনিময়, বিক্রয় ও সোয়াপ
-            </span>{" "}
-            করুন
+              বিক্রি ও বিনিময় করুন
+            </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            কোনো মধ্যস্বত্বভোগী বা কমিশন ছাড়া সরাসরি ক্যাম্পাস ও এলাকার শিক্ষার্থীদের সাথে ইন-অ্যাপ মেসেঞ্জারে কথা বলে বই হাতবদল করুন।
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
+            জিরো কমিশন ও কোনো মধ্যস্বত্বভোগী ছাড়া সরাসরি আশেপাশের শিক্ষার্থীদের সাথে ইন-অ্যাপ মেসেঞ্জারে দরদাম করে বই হাতবদল করুন।
           </p>
 
-          {/* Search Box & Quick Action */}
-          <div className="max-w-2xl mx-auto pt-2">
+          {/* Minimal Search & Action Bar */}
+          <div className="max-w-2xl mx-auto pt-3">
             <form
               action="/explore"
               method="GET"
-              className="bg-white p-2 rounded-2xl sm:rounded-3xl border border-slate-300 shadow-lg shadow-slate-200/60 flex flex-col sm:flex-row items-center gap-2"
+              className="bg-white p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 flex flex-col sm:flex-row items-center gap-2 hover:border-emerald-300 transition-all"
             >
-              <div className="flex items-center gap-2 flex-1 w-full px-3 py-1.5 sm:py-0">
+              <div className="flex items-center gap-2.5 flex-1 w-full px-3 py-1 sm:py-0">
                 <Search className="w-5 h-5 text-slate-400 shrink-0" />
                 <input
                   type="text"
                   name="query"
                   placeholder="বইয়ের নাম, লেখক বা বিষয় দিয়ে খুঁজুন..."
-                  className="w-full text-xs sm:text-sm outline-hidden text-slate-900 placeholder:text-slate-400 bg-transparent"
+                  className="w-full text-xs sm:text-sm outline-hidden text-slate-900 placeholder:text-slate-400 bg-transparent font-medium"
                 />
               </div>
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <button
                   type="submit"
-                  className="flex-1 sm:flex-initial px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                  className="flex-1 sm:flex-initial px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md cursor-pointer"
                 >
                   <Search className="w-4 h-4" />
                   <span>খুঁজুন</span>
@@ -99,18 +104,18 @@ export default async function HomePage() {
 
                 <Link
                   href="/explore"
-                  className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 shrink-0"
+                  className="px-4 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 shrink-0 border border-emerald-200/60"
                 >
                   <MapPin className="w-4 h-4 text-emerald-600" />
-                  <span>ম্যাপ</span>
+                  <span>ম্যাপ ভিউ</span>
                 </Link>
               </div>
             </form>
           </div>
 
-          {/* Popular Categories Pill Bar */}
+          {/* Quick Category Chips */}
           <div className="flex items-center justify-center gap-2 flex-wrap pt-2 text-xs">
-            <span className="text-slate-500 font-medium">জনপ্রিয়:</span>
+            <span className="text-slate-400 font-medium">ক্যাটাগরি:</span>
             {[
               { label: "ইঞ্জিনিয়ারিং", query: "ACADEMIC_ENG", icon: GraduationCap },
               { label: "মেডিকেল", query: "ACADEMIC_MED", icon: Stethoscope },
@@ -120,56 +125,83 @@ export default async function HomePage() {
               <Link
                 key={idx}
                 href={`/explore?category=${cat.query}`}
-                className="px-3 py-1 bg-white hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 hover:text-emerald-800 rounded-full border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
+                className="px-3 py-1.5 bg-white hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 hover:text-emerald-800 rounded-xl border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"
               >
                 <cat.icon className="w-3.5 h-3.5 text-emerald-600" />
                 <span>{cat.label}</span>
               </Link>
             ))}
           </div>
+
+          {/* Trust Points */}
+          <div className="pt-4 flex items-center justify-center gap-6 sm:gap-10 text-xs text-slate-500 font-medium flex-wrap">
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>১০০% ফ্রি ও জিরো কমিশন</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>ইন-অ্যাপ মেসেঞ্জার চ্যাট</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>নিরাপদ লোকাল স্পটে হ্যান্ডওভার</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 2. 3 CLEAN VALUE PILLARS */}
+      {/* 2. HOW IT WORKS (৩টি সহজ ধাপ) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1 */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all space-y-3 group">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <MapPin className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900">
-              হাইপার-লোকাল ম্যাপ ডিসকভারি
-            </h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              আপনার এলাকার ১-১০ কিমির মধ্যে কে কোন বইটি বিক্রি বা সোয়াপ করছেন সরাসরি ম্যাপে পিন আকারে দেখে নিন।
+        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xs space-y-8">
+          <div className="text-center max-w-xl mx-auto space-y-1">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900">
+              কীভাবে কাজ করে বইবিনিময়?
+            </h2>
+            <p className="text-xs text-slate-500">
+              মাত্র ৩টি সহজ ধাপে বই আদান-প্রদান সম্পন্ন করুন
             </p>
           </div>
 
-          {/* Card 2 */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all space-y-3 group">
-            <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <MessageCircle className="w-5 h-5" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Step 1 */}
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative group hover:bg-emerald-50/50 hover:border-emerald-200 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-emerald-600/20">
+                ১
+              </div>
+              <h3 className="font-bold text-slate-900 text-sm">
+                বই খুঁজুন বা পোস্ট করুন
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                আপনার এলাকার ১-১০ কিমির মধ্যে বই সার্চ করুন অথবা নিজের অপ্রয়োজনীয় বই মাত্র ১ মিনিটে পোস্ট করুন।
+              </p>
             </div>
-            <h3 className="text-base font-bold text-slate-900">
-              মেসেঞ্জার চ্যাট ও দরদাম
-            </h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              ব্যক্তিগত নম্বর শেয়ার ছাড়া ইন-অ্যাপ চ্যাট করুন, দামের প্রস্তাব (Make an Offer) পাঠান এবং নিরাপদ পাবলিক স্পটে হাতবদল করুন।
-            </p>
-          </div>
 
-          {/* Card 3 */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all space-y-3 group">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Gift className="w-5 h-5" />
+            {/* Step 2 */}
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative group hover:bg-emerald-50/50 hover:border-emerald-200 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-teal-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-teal-600/20">
+                ২
+              </div>
+              <h3 className="font-bold text-slate-900 text-sm">
+                মেসেঞ্জারে চ্যাট ও দরদাম
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                ব্যক্তিগত ফোন নম্বর ছাড়াই ইন-অ্যাপ চ্যাটে কথা বলুন, অফার পাঠান এবং দাম চূড়ান্ত করুন।
+              </p>
             </div>
-            <h3 className="text-base font-bold text-slate-900">
-              ১০ বন্ধুতে ৫০৳ রিওয়ার্ড
-            </h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              বন্ধুদের ইনভাইট করুন। প্রত্যেকে ১টি বই পোস্ট করলেই আপনি পাবেন ১০০ পয়েন্ট। ১০০০ পয়েন্ট হলে বিকাশ/নগদে ক্যাশআউট!
-            </p>
+
+            {/* Step 3 */}
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative group hover:bg-emerald-50/50 hover:border-emerald-200 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-amber-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-amber-600/20">
+                ৩
+              </div>
+              <h3 className="font-bold text-slate-900 text-sm">
+                কাছের স্পটে নিরাপদ বিনিময়
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                ক্যাম্পাস বা নিকটস্থ পরিচিত পাবলিক স্পটে দেখা করে সরাসরি বই হাতবদল করুন।
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -180,7 +212,7 @@ export default async function HomePage() {
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-emerald-600" />
-              <span>সম্প্রতি আপলোড হওয়া বই</span>
+              <span>সদ্য আপলোড হওয়া বই</span>
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
               শিক্ষার্থীদের সংগৃহীত বইসমূহ থেকে বেছে নিন
@@ -189,7 +221,7 @@ export default async function HomePage() {
 
           <Link
             href="/explore"
-            className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 hover:underline bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+            className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 hover:underline bg-emerald-50 px-3.5 py-2 rounded-xl border border-emerald-200/80 transition-colors"
           >
             <span>সব দেখুন</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -202,7 +234,7 @@ export default async function HomePage() {
             <Link
               key={book.id}
               href={`/books/${book.id}`}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md hover:border-emerald-300 transition-all flex flex-col group"
+              className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-lg hover:border-emerald-300 transition-all flex flex-col group"
             >
               <div className="relative h-44 sm:h-52 bg-slate-100 overflow-hidden">
                 <img
@@ -214,7 +246,7 @@ export default async function HomePage() {
                 {/* Deal Type Badge */}
                 <div className="absolute top-2.5 left-2.5">
                   <span
-                    className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold shadow-xs ${
+                    className={`px-2.5 py-0.5 rounded-lg text-[11px] font-bold shadow-xs ${
                       book.dealType === "SELL"
                         ? "bg-emerald-600 text-white"
                         : book.dealType === "SWAP"
@@ -237,7 +269,7 @@ export default async function HomePage() {
 
               <div className="p-3.5 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1 mb-1 group-hover:text-emerald-700 transition-colors">
+                  <h3 className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1 mb-0.5 group-hover:text-emerald-700 transition-colors">
                     {book.title}
                   </h3>
                   <p className="text-[11px] text-slate-500 line-clamp-1 mb-2">{book.author}</p>
@@ -257,13 +289,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 4. BOOK REQUESTS ("বইয়ের খোঁজ চাই") SNIPPET */}
+      {/* 4. BOOK REQUESTS ("বইয়ের খোঁজ চাই") */}
       {recentRequests.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-emerald-50/70 rounded-3xl p-6 sm:p-8 border border-emerald-200/80 space-y-6">
+          <div className="bg-emerald-50/60 rounded-3xl p-6 sm:p-8 border border-emerald-200/60 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <span className="text-xs font-bold text-emerald-800 bg-emerald-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-emerald-800 bg-emerald-200/60 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                   বইয়ের খোঁজ চাই
                 </span>
                 <h2 className="text-lg sm:text-2xl font-black text-slate-900 mt-1">
@@ -282,7 +314,7 @@ export default async function HomePage() {
               {recentRequests.map((req) => (
                 <div
                   key={req.id}
-                  className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-2.5"
+                  className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-2.5 hover:border-emerald-300 transition-all"
                 >
                   <h4 className="font-bold text-xs sm:text-sm text-slate-900 line-clamp-1">
                     {req.title}
@@ -301,9 +333,9 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 5. CALL TO ACTION: POST A BOOK */}
+      {/* 5. CALL TO ACTION BANNER */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-gradient-to-r from-emerald-700 to-teal-800 rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center md:text-left">
             <h3 className="text-2xl sm:text-3xl font-black">
               আপনার কাছে অপ্রয়োজনীয় বই জমা আছে?
