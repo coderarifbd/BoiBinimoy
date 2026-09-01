@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import HeroSearchBar from "@/components/home/HeroSearchBar";
+import HomeRequestCards from "@/components/home/HomeRequestCards";
 import {
   BookOpen,
   MapPin,
@@ -28,7 +29,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // Fetch recent books for the homepage feed
+  // Fetch recent books and requests for the homepage feed
   let recentBooks: any[] = [];
   let recentRequests: any[] = [];
   try {
@@ -42,7 +43,7 @@ export default async function HomePage() {
       where: { status: "OPEN" },
       take: 3,
       include: {
-        user: { select: { name: true, locationName: true } },
+        user: { select: { id: true, name: true, locationName: true } },
       },
       orderBy: { createdAt: "desc" },
     });
@@ -201,49 +202,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 3. BOOK REQUESTS ("বইয়ের খোঁজ চাই") */}
-      {recentRequests.length > 0 && (
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-emerald-50/60 dark:bg-slate-900/80 rounded-3xl p-6 sm:p-8 border border-emerald-200/60 dark:border-slate-800 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-200/60 dark:bg-emerald-950/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                  বইয়ের খোঁজ চাই
-                </span>
-                <h2 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
-                  পাঠকদের কাঙ্ক্ষিত বইয়ের তালিকা
-                </h2>
-              </div>
-              <Link
-                href="/requests"
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl self-start sm:self-auto shadow-xs transition-colors"
-              >
-                সব রিকোয়েস্ট দেখুন
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {recentRequests.map((req) => (
-                <div
-                  key={req.id}
-                  className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2.5 hover:border-emerald-400 dark:hover:border-emerald-500/60 transition-all"
-                >
-                  <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white line-clamp-1">
-                    {req.title}
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-2 italic">
-                    "{req.description || "আমার এই বইটি জরুরি প্রয়োজন"}"
-                  </p>
-                  <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                    <span>👤 {req.user?.name}</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold">📍 {req.approxLocation}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* 3. BOOK REQUESTS ("বইয়ের খোঁজ চাই") - Identical to Requests Page Design */}
+      <HomeRequestCards requests={recentRequests} />
 
       {/* 4. HOW IT WORKS (৩টি সহজ ধাপ) - Right above CTA Section */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
