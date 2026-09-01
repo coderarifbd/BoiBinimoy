@@ -154,11 +154,11 @@ export default function WalletPage() {
   if (!user && !loading) {
     return (
       <div className="max-w-md mx-auto py-20 px-4 text-center">
-        <Gift className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-        <h2 className="text-lg font-bold text-slate-800">ওয়ালেট দেখতে লগইন করুন</h2>
+        <Gift className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+        <h2 className="text-lg font-bold text-slate-800 dark:text-white">ওয়ালেট দেখতে লগইন করুন</h2>
         <Link
           href="/login"
-          className="inline-block mt-4 px-6 py-2.5 bg-emerald-600 text-white font-bold rounded-xl text-xs"
+          className="inline-block mt-4 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-xs"
         >
           লগইন করুন
         </Link>
@@ -173,7 +173,7 @@ export default function WalletPage() {
   const canWithdraw = points >= 1000;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8 transition-colors">
       {/* 1. HERO BANNER: 10 FRIENDS = ৳50 */}
       <div className="bg-gradient-to-br from-amber-600 via-amber-700 to-orange-800 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
         <div className="absolute -right-8 -bottom-8 w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
@@ -181,7 +181,7 @@ export default function WalletPage() {
         <div className="relative z-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-xs text-xs font-bold text-amber-100">
             <Sparkles className="w-3.5 h-3.5" />
-            গ্রোথ ও রেফারেল সিস্টেম
+            <span>গ্রোথ ও রেফারেল সিস্টেম</span>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -237,12 +237,13 @@ export default function WalletPage() {
           {/* WITHDRAW BUTTON (Active when points >= 1000) */}
           <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
             <button
+              type="button"
               onClick={() => {
                 setWithdrawSuccess(false);
                 setWithdrawModalOpen(true);
               }}
               disabled={!canWithdraw}
-              className={`w-full sm:w-auto py-3.5 px-8 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-lg transition-all ${
+              className={`w-full sm:w-auto py-3.5 px-8 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer ${
                 canWithdraw
                   ? "bg-white text-slate-900 hover:bg-amber-50 shadow-white/20 scale-105"
                   : "bg-white/20 text-white/60 cursor-not-allowed"
@@ -262,12 +263,12 @@ export default function WalletPage() {
       </div>
 
       {/* 3. SHARE REFERRAL LINK WIDGET */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-          <Share2 className="w-5 h-5 text-emerald-600" />
-          আপনার নিজস্ব রেফারেল লিংক
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <Share2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+          <span>আপনার নিজস্ব রেফারেল লিংক</span>
         </h2>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-slate-500 dark:text-slate-400">
           লিংকটি কপি করে বন্ধুদের পাঠান। তারা সাইন-আপ করার পর অন্তত ১টি আসল বই লিস্ট করলেই আপনার একাউন্টে ১০০ পয়েন্ট জমা হবে।
         </p>
 
@@ -277,37 +278,40 @@ export default function WalletPage() {
             type="text"
             readOnly
             value={referralLink}
-            className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-mono font-bold text-slate-700 outline-hidden"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-800 dark:text-slate-200 outline-hidden"
           />
           <button
+            type="button"
             onClick={handleCopyLink}
-            className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors shrink-0 shadow-xs"
+            className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors shrink-0 shadow-xs cursor-pointer"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-            {copied ? "কপি হয়েছে!" : "লিংক কপি"}
+            {copied ? <Check className="w-4 h-4 text-emerald-400 dark:text-white" /> : <Copy className="w-4 h-4" />}
+            <span>{copied ? "কপি হয়েছে!" : "লিংক কপি"}</span>
           </button>
         </div>
 
         {/* Social Share Buttons */}
         <div className="flex flex-wrap gap-2.5 pt-2">
           <button
+            type="button"
             onClick={handleShareWhatsApp}
-            className="px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-colors"
+            className="px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
           >
             <span>💬 হোয়াটসঅ্যাপে শেয়ার করুন</span>
           </button>
 
           <button
+            type="button"
             onClick={handleShareMessenger}
-            className="px-4 py-2 bg-[#0084FF] hover:bg-[#0073e6] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-colors"
+            className="px-4 py-2 bg-[#0084FF] hover:bg-[#0073e6] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
           >
             <span>⚡ মেসেঞ্জারে শেয়ার করুন</span>
           </button>
         </div>
 
         {/* Anti-Fraud Notice */}
-        <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5 mt-4">
-          <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+        <div className="p-4 bg-amber-50 dark:bg-amber-950/40 rounded-2xl border border-amber-200 dark:border-amber-900/60 text-xs text-amber-900 dark:text-amber-300 flex items-start gap-2.5 mt-4">
+          <ShieldCheck className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
           <p className="leading-relaxed">
             <strong>ফ্রড প্রিভেনশন রুল:</strong> শুধু ফেক সাইন-আপ ঠেকাতে নতুন বন্ধুকে অবশ্যই অন্তত ১টি বইয়ের ছবি দিয়ে লিস্টিং সম্পন্ন করতে হবে। বই লিস্ট করলেই পয়েন্ট যোগ হবে।
           </p>
@@ -315,42 +319,42 @@ export default function WalletPage() {
       </div>
 
       {/* 4. REFERRED FRIENDS & VERIFICATION STATUS */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Users className="w-5 h-5 text-emerald-600" />
-              রেফার করা বন্ধুদের হিস্ট্রি
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <span>রেফার করা বন্ধুদের হিস্ট্রি</span>
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               মোট জয়েন করেছে {totalReferred} জন (সফল বই লিস্টিং: {verifiedReferrals} জন)
             </p>
           </div>
         </div>
 
         {referralLogs.length === 0 ? (
-          <div className="py-8 text-center text-slate-400 text-xs">
+          <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-xs">
             এখনও কোনো বন্ধু আপনার লিংকে জয়েন করেনি। বন্ধুদের রেফারেল লিংক শেয়ার করুন!
           </div>
         ) : (
-          <div className="divide-y divide-slate-100 max-h-64 overflow-y-auto pr-1">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-64 overflow-y-auto pr-1">
             {referralLogs.map((log) => (
               <div key={log.id} className="py-3 flex items-center justify-between gap-3 text-xs">
                 <div>
-                  <p className="font-bold text-slate-800">{log.referredUser.name}</p>
-                  <p className="text-[11px] text-slate-400">
+                  <p className="font-bold text-slate-800 dark:text-slate-200">{log.referredUser.name}</p>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500">
                     জয়েন তারিখ: {new Date(log.createdAt).toLocaleDateString("bn-BD")}
                   </p>
                 </div>
 
                 <div>
                   {log.hasListedBook ? (
-                    <span className="px-2.5 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-lg text-[11px] flex items-center gap-1">
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      বই লিস্ট করেছে (+১০০ pt)
+                    <span className="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold rounded-lg text-[11px] flex items-center gap-1 border border-emerald-200 dark:border-emerald-800/60">
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span>বই লিস্ট করেছে (+১০০ pt)</span>
                     </span>
                   ) : (
-                    <span className="px-2.5 py-1 bg-amber-100 text-amber-800 font-bold rounded-lg text-[11px]">
+                    <span className="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 font-bold rounded-lg text-[11px] border border-amber-200 dark:border-amber-800/60">
                       ⏳ বই লিস্টিং বাকি (০ pt)
                     </span>
                   )}
@@ -362,31 +366,31 @@ export default function WalletPage() {
       </div>
 
       {/* 5. WITHDRAWAL HISTORY */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-          <Clock className="w-5 h-5 text-emerald-600" />
-          ক্যাশআউট ও উইথড্র হিস্ট্রি
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <Clock className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+          <span>ক্যাশআউট ও উইথড্র হিস্ট্রি</span>
         </h2>
 
         {withdrawals.length === 0 ? (
-          <div className="py-6 text-center text-slate-400 text-xs">
+          <div className="py-6 text-center text-slate-400 dark:text-slate-500 text-xs">
             আপনার কোনো উইথড্র রিকোয়েস্ট নেই
           </div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800">
             {withdrawals.map((w) => (
               <div key={w.id} className="py-3.5 flex items-center justify-between gap-3 text-xs">
                 <div>
-                  <div className="flex items-center gap-2 font-bold text-slate-800">
+                  <div className="flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
                     <span>৳{w.amount}</span>
                     <span className="text-slate-400">•</span>
-                    <span className="text-slate-600">{w.method}: {w.accountNumber}</span>
+                    <span>{w.method}: {w.accountNumber}</span>
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
                     তারিখ: {new Date(w.createdAt).toLocaleDateString("bn-BD")}
                   </p>
                   {w.adminNote && (
-                    <p className="text-[11px] text-emerald-700 font-medium mt-0.5">
+                    <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium mt-0.5">
                       নোট: {w.adminNote}
                     </p>
                   )}
@@ -396,10 +400,10 @@ export default function WalletPage() {
                   <span
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
                       w.status === "APPROVED"
-                        ? "bg-emerald-100 text-emerald-800"
+                        ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60"
                         : w.status === "REJECTED"
-                        ? "bg-rose-100 text-rose-800"
-                        : "bg-amber-100 text-amber-800"
+                        ? "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60"
+                        : "bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60"
                     }`}
                   >
                     {w.status === "APPROVED"
@@ -418,15 +422,16 @@ export default function WalletPage() {
       {/* WITHDRAW MODAL */}
       {withdrawModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-100 animate-in fade-in">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-1.5">
-                <Smartphone className="w-5 h-5 text-emerald-600" />
-                ৫০ টাকা উইথড্র রিকোয়েস্ট
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Smartphone className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <span>৫০ টাকা উইথড্র রিকোয়েস্ট</span>
               </h3>
               <button
+                type="button"
                 onClick={() => setWithdrawModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 font-bold"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-bold cursor-pointer"
               >
                 ✕
               </button>
@@ -434,35 +439,36 @@ export default function WalletPage() {
 
             {withdrawSuccess ? (
               <div className="text-center py-6 space-y-3">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 flex items-center justify-center mx-auto">
                   <Check className="w-6 h-6" />
                 </div>
-                <h4 className="font-bold text-slate-800">উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!</h4>
-                <p className="text-xs text-slate-500">
+                <h4 className="font-bold text-slate-800 dark:text-white">উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!</h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   সুপার অ্যাডমিন আপনার রেফারেল ভেরিফাই করে অল্প সময়ের মধ্যে টাকা পাঠিয়ে দেবেন।
                 </p>
                 <button
+                  type="button"
                   onClick={() => setWithdrawModalOpen(false)}
-                  className="w-full py-2.5 bg-emerald-600 text-white text-xs font-bold rounded-xl"
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl cursor-pointer"
                 >
                   ঠিক আছে
                 </button>
               </div>
             ) : (
               <form onSubmit={handleWithdrawSubmit} className="space-y-4">
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   ১,০০০ পয়েন্টের বিনিময়ে ৫০ টাকা ক্যাশআউট রিকোয়েস্ট সাবমিট করুন।
                 </p>
 
                 {withdrawError && (
-                  <div className="p-3 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-xs">
+                  <div className="p-3 bg-rose-50 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900 rounded-xl text-xs">
                     {withdrawError}
                   </div>
                 )}
 
                 {/* Method selector */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                     ক্যাশআউট মেথড নির্বাচন করুন *
                   </label>
                   <div className="grid grid-cols-3 gap-2">
@@ -471,10 +477,10 @@ export default function WalletPage() {
                         key={m}
                         type="button"
                         onClick={() => setMethod(m)}
-                        className={`py-2 px-2 text-xs font-bold rounded-xl border text-center transition-all ${
+                        className={`py-2 px-2 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer ${
                           method === m
-                            ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-500/20"
-                            : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                            ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 ring-2 ring-emerald-500/20"
+                            : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
                         }`}
                       >
                         {m === "BKASH" ? "বিকাশ (bKash)" : m === "NAGAD" ? "নগদ (Nagad)" : "মোবাইল রিচার্জ"}
@@ -485,7 +491,7 @@ export default function WalletPage() {
 
                 {/* Account / Phone */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     {method === "RECHARGE" ? "রিচার্জ মোবাইল নম্বর *" : `${method} একাউন্ট নম্বর *`}
                   </label>
                   <input
@@ -493,7 +499,7 @@ export default function WalletPage() {
                     placeholder="যেমন: 017XXXXXXXX"
                     value={accountNumber}
                     onChange={(e) => setAccountNumber(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold outline-hidden focus:border-emerald-500"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold outline-hidden focus:border-emerald-500"
                     required
                   />
                 </div>
@@ -502,7 +508,7 @@ export default function WalletPage() {
                   <button
                     type="submit"
                     disabled={withdrawing}
-                    className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20"
+                    className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 cursor-pointer"
                   >
                     {withdrawing ? "প্রসেস হচ্ছে..." : "উইথড্র রিকোয়েস্ট সাবমিট করুন (৫০৳)"}
                   </button>
