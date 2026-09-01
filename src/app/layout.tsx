@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { ChatWidgetProvider } from "@/context/ChatWidgetContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -29,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bn">
+    <html lang="bn" className="dark">
       <head>
         <link
           rel="stylesheet"
@@ -39,16 +40,18 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-slate-50 text-slate-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <AuthProvider>
-          <ChatWidgetProvider>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <FloatingChatWidget />
-          </ChatWidgetProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <ChatWidgetProvider>
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <FloatingChatWidget />
+            </ChatWidgetProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
