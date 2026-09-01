@@ -80,9 +80,9 @@ export default async function HomePage() {
           {/* Minimal Search & Action Bar with Distance-Sorted Auto-Suggestions */}
           <HeroSearchBar />
 
-          {/* Quick Category Chips */}
-          <div className="flex items-center justify-center gap-2 flex-wrap pt-2 text-sm">
-            <span className="text-slate-400 dark:text-slate-500 font-medium">ক্যাটাগরি:</span>
+          {/* Quick Category Chips - Compact & Sleek */}
+          <div className="flex items-center justify-center gap-1.5 flex-wrap pt-1.5 text-xs">
+            <span className="text-slate-400 dark:text-slate-500 font-medium text-xs">ক্যাটাগরি:</span>
             {[
               { label: "ইঞ্জিনিয়ারিং", query: "ACADEMIC_ENG", icon: GraduationCap },
               { label: "মেডিকেল", query: "ACADEMIC_MED", icon: Stethoscope },
@@ -92,9 +92,9 @@ export default async function HomePage() {
               <Link
                 key={idx}
                 href={`/explore?category=${cat.query}`}
-                className="px-3.5 py-1.5 bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-emerald-800 dark:hover:text-emerald-300 rounded-xl border border-slate-200 dark:border-slate-800 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"
+                className="px-2.5 py-1 bg-white dark:bg-slate-900/90 hover:bg-emerald-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-medium flex items-center gap-1.5 transition-all shadow-2xs hover:shadow-xs"
               >
-                <cat.icon className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <cat.icon className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>{cat.label}</span>
               </Link>
             ))}
