@@ -135,7 +135,7 @@ export default function HeroSearchBar() {
   };
 
   return (
-    <div ref={containerRef} className="relative max-w-2xl mx-auto pt-3 z-50">
+    <div ref={containerRef} className="relative max-w-2xl mx-auto pt-3 z-50 text-left">
       {/* Clean Single Search Form without Map View button */}
       <form
         onSubmit={handleSearchSubmit}
@@ -184,11 +184,11 @@ export default function HeroSearchBar() {
         </button>
       </form>
 
-      {/* 🚀 DYNAMIC-HEIGHT AUTO-SUGGESTION DROPDOWN (Adapts height to results with max-height & scrollbar) */}
+      {/* 🚀 DYNAMIC-HEIGHT AUTO-SUGGESTION DROPDOWN (Strict Left-Aligned Text) */}
       {isOpen && query.trim().length >= 2 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 flex flex-col h-auto max-h-[380px]">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 flex flex-col h-auto max-h-[380px] text-left">
           {/* Compact Header */}
-          <div className="px-4 py-2 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 shrink-0">
+          <div className="px-4 py-2 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 shrink-0 text-left">
             <span className="font-bold flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
               <Sparkles className="w-3.5 h-3.5" />
               নিকটস্থ ফলাফল (দূরত্ব অনুযায়ী সাজানো)
@@ -215,41 +215,41 @@ export default function HeroSearchBar() {
                     key={book.id}
                     href={`/books/${book.id}`}
                     onClick={() => setIsOpen(false)}
-                    className="p-3 flex items-center justify-between gap-3 hover:bg-emerald-50/60 dark:hover:bg-slate-800/70 transition-colors group"
+                    className="p-3.5 flex items-center justify-between gap-3.5 hover:bg-emerald-50/60 dark:hover:bg-slate-800/70 transition-colors group text-left"
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-3.5 min-w-0 flex-1 text-left">
                       <img
                         src={
                           book.images?.[0] ||
                           "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&auto=format&fit=crop&q=80"
                         }
                         alt={book.title}
-                        className="w-10 h-13 object-cover rounded-lg border border-slate-200 dark:border-slate-700 shrink-0 bg-slate-100 dark:bg-slate-800"
+                        className="w-11 h-14 object-cover rounded-lg border border-slate-200 dark:border-slate-700 shrink-0 bg-slate-100 dark:bg-slate-800"
                       />
 
-                      <div className="min-w-0">
-                        <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                      <div className="min-w-0 flex-1 text-left space-y-0.5">
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors text-left block">
                           {book.title}
                         </h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate text-left block">
                           {book.author}
                         </p>
 
-                        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                        <div className="flex items-center justify-start gap-2 pt-0.5 flex-wrap text-left">
                           {distanceStr && (
-                            <span className="text-[11px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center gap-1">
+                            <span className="text-[11px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center gap-1 shrink-0">
                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                               {distanceStr}
                             </span>
                           )}
-                          <span className="text-[11px] text-slate-400 dark:text-slate-500 truncate max-w-[120px]">
+                          <span className="text-[11px] text-slate-400 dark:text-slate-500 truncate max-w-[140px] text-left">
                             📍 {book.approxLocation || "ক্যাম্পাস"}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-col items-end gap-1 shrink-0">
+                    <div className="flex flex-col items-end gap-1 shrink-0 text-right">
                       <span
                         className={`px-2 py-0.5 rounded text-xs font-black shadow-2xs ${
                           book.dealType === "SELL"
