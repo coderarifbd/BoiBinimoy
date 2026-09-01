@@ -135,7 +135,7 @@ export default function HeroSearchBar() {
   };
 
   return (
-    <div ref={containerRef} className="relative max-w-2xl mx-auto pt-3 z-30">
+    <div ref={containerRef} className="relative max-w-2xl mx-auto pt-3 z-50">
       {/* Clean Single Search Form without Map View button */}
       <form
         onSubmit={handleSearchSubmit}

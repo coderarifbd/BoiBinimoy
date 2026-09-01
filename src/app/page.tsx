@@ -53,7 +53,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen space-y-16 pb-20 transition-colors">
       {/* 1. SEAMLESS CLEAN HERO SECTION */}
-      <section className="relative pt-12 sm:pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-emerald-500/5 via-teal-500/5 to-transparent dark:from-emerald-950/25 dark:via-slate-900/10 dark:to-transparent border-b border-slate-200/50 dark:border-slate-800/60">
+      <section className="relative z-30 pt-12 sm:pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-emerald-500/5 via-teal-500/5 to-transparent dark:from-emerald-950/25 dark:via-slate-900/10 dark:to-transparent border-b border-slate-200/50 dark:border-slate-800/60">
         {/* Subtle Ambient Radial Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-emerald-500/10 dark:bg-emerald-500/15 blur-[120px] pointer-events-none rounded-full"></div>
 
