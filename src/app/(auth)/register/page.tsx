@@ -78,7 +78,7 @@ function RegisterForm() {
         setDetectingGps(false);
         alert("লোকেশন পারমিশন পাওয়া যায়নি। নিচে সার্চ করে আপনার এলাকা সিলেক্ট করুন।");
       },
-      { timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   };
 

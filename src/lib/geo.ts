@@ -60,25 +60,60 @@ export async function searchLocationsBD(query: string): Promise<Array<{ name: st
   }
 }
 
-// Dynamic Reverse Geocode (GPS Coordinates -> Human Readable Address)
+// Dynamic Reverse Geocode (GPS Coordinates -> Exact Human Readable Landmark/Street/City Address)
 export async function reverseGeocodeBD(lat: number, lon: number): Promise<string> {
   try {
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=14&addressdetails=1`,
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
       {
         headers: {
           "Accept-Language": "bn,en",
+          "User-Agent": "BoiBinimoy-App/1.0",
         },
       }
     );
-    if (!res.ok) return `${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+    if (!res.ok) return `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
     const data = await res.json();
     const addr = data.address || {};
-    const city = addr.city || addr.town || addr.district || addr.county || addr.state_district || "";
-    const suburb = addr.suburb || addr.neighbourhood || addr.road || "";
-    if (suburb && city) return `${suburb}, ${city}`;
-    if (city) return city;
-    return data.display_name?.split(", ").slice(0, 2).join(", ") || "আমার বর্তমান অবস্থান";
+
+    const components: string[] = [];
+
+    // 1. Specific Spot/Road/Landmark
+    const spot =
+      addr.amenity ||
+      addr.building ||
+      addr.road ||
+      addr.neighbourhood ||
+      addr.residential ||
+      addr.suburb ||
+      addr.village ||
+      addr.hamlet;
+    if (spot) components.push(spot);
+
+    // 2. Thana / Sub-district / Town
+    const thana =
+      addr.subdistrict ||
+      addr.city_district ||
+      addr.municipality ||
+      addr.town ||
+      addr.borough ||
+      addr.county;
+    if (thana && !components.includes(thana) && thana !== spot) {
+      components.push(thana);
+    }
+
+    // 3. District / Major City
+    const district = addr.city || addr.district || addr.state_district;
+    if (district && !components.includes(district) && district !== thana && district !== spot) {
+      components.push(district);
+    }
+
+    if (components.length > 0) {
+      return components.slice(0, 3).join(", ");
+    }
+
+    // Fallback to top 2 parts of display_name
+    return data.display_name?.split(", ").slice(0, 3).join(", ") || "আমার বর্তমান অবস্থান";
   } catch (err) {
     return "আমার বর্তমান অবস্থান";
   }

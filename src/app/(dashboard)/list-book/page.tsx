@@ -67,7 +67,7 @@ export default function ListBookPage() {
     }
   }, [user]);
 
-  // Live GPS Fetch handler
+  // Live GPS Fetch handler with High Accuracy
   const handleFetchGps = () => {
     if (!navigator.geolocation) {
       alert("জিপিএস পারমিশন পাওয়া যায়নি");
@@ -90,7 +90,7 @@ export default function ListBookPage() {
         setDetectingGps(false);
         alert("লোকেশন পারমিশন পাওয়া যায়নি। নিচে সার্চ করে আপনার এলাকা নির্বাচন করুন।");
       },
-      { timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   };
 
