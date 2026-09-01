@@ -164,7 +164,7 @@ export default function ListBookPage() {
         const uploadRes = await fetch("/api/upload", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: imgBase64 }),
+          body: JSON.stringify({ base64Image: imgBase64, image: imgBase64 }),
         });
         const uploadData = await uploadRes.json();
         if (uploadRes.ok && uploadData.url) {

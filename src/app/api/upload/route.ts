@@ -9,13 +9,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "লগইন করুন" }, { status: 401 });
     }
 
-    const { base64Image, folder } = await req.json();
+    const body = await req.json();
+    const base64Image = body.base64Image || body.image || body.file;
 
     if (!base64Image) {
       return NextResponse.json({ error: "ছবি প্রদান করুন" }, { status: 400 });
     }
 
-    const uploadRes = await uploadToCloudinary(base64Image, folder || "boibinimoy_books");
+    const uploadRes = await uploadToCloudinary(base64Image, body.folder || "boibinimoy_books");
 
     if (!uploadRes) {
       // Return base64 as fallback if Cloudinary API is unreachable in local dev
