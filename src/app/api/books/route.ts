@@ -67,12 +67,14 @@ export async function GET(req: NextRequest) {
         .filter((b) => b.distance <= maxDistance)
         .sort((a, b) => (a.distance || 0) - (b.distance || 0));
     } else if (lat !== null && lon !== null) {
-      books = books.map((b) => {
-        const bookLat = b.latitude || 23.726;
-        const bookLon = b.longitude || 90.398;
-        const distance = calculateDistanceKm(lat, lon, bookLat, bookLon);
-        return { ...b, distance };
-      });
+      books = books
+        .map((b) => {
+          const bookLat = b.latitude || 23.726;
+          const bookLon = b.longitude || 90.398;
+          const distance = calculateDistanceKm(lat, lon, bookLat, bookLon);
+          return { ...b, distance };
+        })
+        .sort((a, b) => (a.distance || 0) - (b.distance || 0));
     }
 
     // Fuzz exact coordinates for map pin privacy

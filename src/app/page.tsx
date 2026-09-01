@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import HeroSearchBar from "@/components/home/HeroSearchBar";
 import {
   BookOpen,
   MapPin,
@@ -76,42 +77,8 @@ export default async function HomePage() {
             জিরো কমিশন ও কোনো মধ্যস্বত্বভোগী ছাড়া সরাসরি আশেপাশের শিক্ষার্থীদের সাথে ইন-অ্যাপ মেসেঞ্জারে কথা বলে বই হাতবদল করুন।
           </p>
 
-          {/* Minimal Search & Action Bar */}
-          <div className="max-w-2xl mx-auto pt-3">
-            <form
-              action="/explore"
-              method="GET"
-              className="bg-white dark:bg-slate-900/95 p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-black/50 flex flex-col sm:flex-row items-center gap-2 hover:border-emerald-400 dark:hover:border-emerald-500/60 transition-all backdrop-blur-md"
-            >
-              <div className="flex items-center gap-2.5 flex-1 w-full px-3 py-1 sm:py-0">
-                <Search className="w-5 h-5 text-slate-400 dark:text-slate-500 shrink-0" />
-                <input
-                  type="text"
-                  name="query"
-                  placeholder="বইয়ের নাম, লেখক বা বিষয় দিয়ে খুঁজুন..."
-                  className="w-full text-sm sm:text-base outline-hidden text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-transparent font-medium"
-                />
-              </div>
-
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <button
-                  type="submit"
-                  className="flex-1 sm:flex-initial px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl sm:rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md cursor-pointer"
-                >
-                  <Search className="w-4 h-4" />
-                  <span>খুঁজুন</span>
-                </button>
-
-                <Link
-                  href="/explore"
-                  className="px-4 py-3 bg-emerald-50 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-slate-700 text-emerald-800 dark:text-emerald-300 rounded-xl sm:rounded-2xl font-bold text-sm transition-colors flex items-center justify-center gap-1.5 shrink-0 border border-emerald-200/60 dark:border-slate-700"
-                >
-                  <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span>ম্যাপ ভিউ</span>
-                </Link>
-              </div>
-            </form>
-          </div>
+          {/* Minimal Search & Action Bar with Distance-Sorted Auto-Suggestions */}
+          <HeroSearchBar />
 
           {/* Quick Category Chips */}
           <div className="flex items-center justify-center gap-2 flex-wrap pt-2 text-sm">
