@@ -150,7 +150,7 @@ export default function ListBookPage() {
     }
 
     if (dealType === "SELL" && (!price || parseFloat(price) <= 0)) {
-      setError("সঠিক বিক্রয়মূল্য (টাকা) উল্লেখ করুন");
+      setError("বিক্রয়মূল্য উল্লেখ করুন");
       return;
     }
 
@@ -158,23 +158,19 @@ export default function ListBookPage() {
     setError("");
 
     try {
-      // 1. Upload Images to Cloudinary / Server
+      // 1. Upload compressed WebP images to Cloudinary via server API
       const uploadedImageUrls: string[] = [];
       for (const imgBase64 of images) {
-        if (imgBase64.startsWith("data:")) {
-          const upRes = await fetch("/api/upload", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ base64Image: imgBase64, folder: "boibinimoy_books" }),
-          });
-          const upData = await upRes.json();
-          if (upRes.ok && upData.url) {
-            uploadedImageUrls.push(upData.url);
-          } else {
-            uploadedImageUrls.push(imgBase64); // Fallback
-          }
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: imgBase64 }),
+        });
+        const uploadData = await uploadRes.json();
+        if (uploadRes.ok && uploadData.url) {
+          uploadedImageUrls.push(uploadData.url);
         } else {
-          uploadedImageUrls.push(imgBase64);
+          throw new Error(uploadData.error || "ছবি আপলোড ব্যর্থ হয়েছে");
         }
       }
 
@@ -212,16 +208,16 @@ export default function ListBookPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 transition-colors">
       {/* Top Header */}
       <div className="text-center space-y-2 mb-8">
-        <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-wider">
+        <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200 dark:border-emerald-800/60">
           সহজ ৩ ধাপ
         </span>
-        <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
+        <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
           আপনার বই পোস্ট করুন
         </h1>
-        <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
           আপনার পুরাতন বা অতিরিক্ত বইটি অন্য পাঠকদের সাথে সেল, সোয়াপ বা দান করুন।
         </p>
       </div>
@@ -231,10 +227,10 @@ export default function ListBookPage() {
         <div
           className={`p-2.5 rounded-xl border text-center transition-all ${
             step === 1
-              ? "border-emerald-600 bg-emerald-50 text-emerald-800 font-bold shadow-xs"
+              ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs"
               : step > 1
-              ? "border-emerald-200 bg-emerald-500/10 text-emerald-700 font-medium"
-              : "border-slate-200 bg-white text-slate-400"
+              ? "border-emerald-200 dark:border-emerald-900 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-medium"
+              : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500"
           }`}
         >
           <span className="text-xs block">স্টেপ ১</span>
@@ -244,10 +240,10 @@ export default function ListBookPage() {
         <div
           className={`p-2.5 rounded-xl border text-center transition-all ${
             step === 2
-              ? "border-emerald-600 bg-emerald-50 text-emerald-800 font-bold shadow-xs"
+              ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs"
               : step > 2
-              ? "border-emerald-200 bg-emerald-500/10 text-emerald-700 font-medium"
-              : "border-slate-200 bg-white text-slate-400"
+              ? "border-emerald-200 dark:border-emerald-900 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-medium"
+              : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500"
           }`}
         >
           <span className="text-xs block">স্টেপ ২</span>
@@ -257,8 +253,8 @@ export default function ListBookPage() {
         <div
           className={`p-2.5 rounded-xl border text-center transition-all ${
             step === 3
-              ? "border-emerald-600 bg-emerald-50 text-emerald-800 font-bold shadow-xs"
-              : "border-slate-200 bg-white text-slate-400"
+              ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs"
+              : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500"
           }`}
         >
           <span className="text-xs block">স্টেপ ৩</span>
@@ -267,29 +263,29 @@ export default function ListBookPage() {
       </div>
 
       {error && (
-        <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm flex items-center gap-2">
+        <div className="mb-6 p-4 rounded-xl bg-rose-50 dark:bg-rose-950/80 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-sm flex items-center gap-2">
           <AlertCircle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Form Container */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl shadow-slate-200/50">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6 transition-colors">
         {/* ================= STEP 1: IMAGE UPLOAD & WEBP AUTO-COMPRESSION ================= */}
         {step === 1 && (
           <div className="space-y-6 animate-in fade-in duration-200">
             <div>
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <ImageIcon className="w-5 h-5 text-emerald-600" />
-                বইয়ের পরিষ্কার ছবি তুলুন বা সিলেক্ট করুন
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <ImageIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <span>বইয়ের পরিষ্কার ছবি তুলুন বা সিলেক্ট করুন</span>
               </h2>
-              <p className="text-xs text-slate-500 mt-1">
-                ব্রাউজারেই স্বয়ংক্রিয়ভাবে সাইজ কমে <span className="font-semibold text-emerald-700">WebP ফরম্যাট (&lt;500KB)</span> হয়ে আপলোড হবে। (সর্বোচ্চ ৩টি ছবি)
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                ব্রাউজারেই স্বয়ংক্রিয়ভাবে সাইজ কমে <span className="font-semibold text-emerald-600 dark:text-emerald-400">WebP ফরম্যাট (&lt;500KB)</span> হয়ে আপলোড হবে। (সর্বোচ্চ ৩টি ছবি)
               </p>
             </div>
 
             {/* Upload Area */}
-            <label className="border-2 border-dashed border-emerald-300 hover:border-emerald-500 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer bg-emerald-50/40 hover:bg-emerald-50/80 transition-all group">
+            <label className="border-2 border-dashed border-emerald-300 dark:border-emerald-800/80 hover:border-emerald-500 dark:hover:border-emerald-600 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer bg-emerald-50/40 dark:bg-emerald-950/20 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all group">
               <input
                 type="file"
                 multiple
@@ -297,13 +293,13 @@ export default function ListBookPage() {
                 className="hidden"
                 onChange={handleImageUpload}
               />
-              <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform mb-3">
+              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform mb-3 border border-slate-200 dark:border-slate-700">
                 <UploadCloud className="w-7 h-7" />
               </div>
-              <span className="text-sm font-bold text-slate-800">
+              <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
                 ছবি নির্বাচন করতে ক্লিক বা ড্রপ করুন
               </span>
-              <span className="text-xs text-slate-500 mt-1">
+              <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 JPG, PNG বা সরাসরি ক্যামেরা ফটো (Auto WebP Fast Compression)
               </span>
             </label>
@@ -312,7 +308,7 @@ export default function ListBookPage() {
             {images.length > 0 && (
               <div className="grid grid-cols-3 gap-3 pt-2">
                 {images.map((img, idx) => (
-                  <div key={idx} className="relative group rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                  <div key={idx} className="relative group rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
                     <img
                       src={img}
                       alt="Preview"
@@ -321,7 +317,7 @@ export default function ListBookPage() {
                     <button
                       type="button"
                       onClick={() => removeImage(idx)}
-                      className="absolute top-1.5 right-1.5 p-1 bg-slate-900/80 hover:bg-rose-600 text-white rounded-lg text-xs transition-colors"
+                      className="absolute top-1.5 right-1.5 p-1 bg-slate-900/80 hover:bg-rose-600 text-white rounded-lg text-xs transition-colors cursor-pointer"
                     >
                       ✕
                     </button>
@@ -352,9 +348,9 @@ export default function ListBookPage() {
                   setStep(2);
                 }}
                 disabled={images.length === 0}
-                className="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all"
+                className="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
               >
-                পরবর্তী ধাপ: বইয়ের বিবরণ
+                <span>পরবর্তী ধাপ: বইয়ের বিবরণ</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -365,17 +361,17 @@ export default function ListBookPage() {
         {step === 2 && (
           <div className="space-y-5 animate-in fade-in duration-200">
             <div>
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-emerald-600" />
-                বইয়ের মৌলিক তথ্য ও অবস্থান
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <span>বইয়ের মৌলিক তথ্য ও অবস্থান</span>
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 সঠিক তথ্য ও লোকেশন দিলে আপনার এলাকার আগ্রহী পাঠকেরা সহজেই আপনার বইটি খুঁজে পাবে
               </p>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                 বইয়ের নাম *
               </label>
               <input
@@ -383,14 +379,14 @@ export default function ListBookPage() {
                 placeholder="যেমন: Fundamentals of Electric Circuits / প্রফেসরস বিসিএস"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-hidden text-sm"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm outline-hidden focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-medium"
                 required
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   লেখক / পাবলিকেশন
                 </label>
                 <input
@@ -398,18 +394,18 @@ export default function ListBookPage() {
                   placeholder="যেমন: Charles Alexander / হুমায়ূন আহমেদ"
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-hidden text-sm"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm outline-hidden focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   ক্যাটাগরি *
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-hidden text-sm bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm outline-hidden focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-medium"
                 >
                   <option value="ACADEMIC_ENG">একাডেমিক - ইঞ্জিনিয়ারিং</option>
                   <option value="ACADEMIC_MED">একাডেমিক - মেডিকেল</option>
@@ -423,7 +419,7 @@ export default function ListBookPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                 বইয়ের বর্তমান কন্ডিশন *
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -437,10 +433,10 @@ export default function ListBookPage() {
                     key={item.id}
                     type="button"
                     onClick={() => setCondition(item.id)}
-                    className={`py-2 px-2.5 text-xs rounded-xl border text-center transition-all ${
+                    className={`py-2 px-2.5 text-xs rounded-xl border text-center transition-all cursor-pointer ${
                       condition === item.id
-                        ? "border-emerald-600 bg-emerald-50 text-emerald-800 font-bold ring-2 ring-emerald-500/20"
-                        : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                        ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold ring-2 ring-emerald-500/20"
+                        : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
                     }`}
                   >
                     {item.label}
@@ -450,17 +446,17 @@ export default function ListBookPage() {
             </div>
 
             {/* DYNAMIC GPS & LOCATION SELECTION */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-emerald-600" />
-                  বইটির অবস্থান / এরিয়া *
+                <label className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span>বইটির অবস্থান / এরিয়া *</span>
                 </label>
                 <button
                   type="button"
                   onClick={handleFetchGps}
                   disabled={detectingGps}
-                  className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition-colors"
+                  className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition-colors cursor-pointer"
                 >
                   {detectingGps ? (
                     <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -477,25 +473,25 @@ export default function ListBookPage() {
                 placeholder="এলাকার নাম বা ল্যান্ডমার্ক (যেমন: সাতমাথা, বগুড়া / ধানমন্ডি ২৭)"
                 value={locationName}
                 onChange={(e) => setLocationName(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm outline-hidden focus:border-emerald-500 bg-white"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold text-sm outline-hidden focus:border-emerald-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                 required
               />
 
               {/* Dynamic Search Autocomplete */}
               <div className="relative">
-                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="অন্য কোনো জেলা বা থানা সার্চ করুন (যেমন: বগুড়া সদর, সিলেট, রংপুর)..."
                   value={locationSearchQuery}
                   onChange={(e) => handleLocationSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 text-xs outline-hidden focus:border-emerald-500 bg-white"
+                  className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs outline-hidden focus:border-emerald-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
                 />
               </div>
 
               {/* Suggestions list */}
               {locationSuggestions.length > 0 && (
-                <div className="space-y-1 bg-white border border-slate-200 rounded-xl p-2 max-h-40 overflow-y-auto shadow-sm">
+                <div className="space-y-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2 max-h-40 overflow-y-auto shadow-sm">
                   {locationSuggestions.map((item, idx) => (
                     <button
                       key={idx}
@@ -507,21 +503,21 @@ export default function ListBookPage() {
                         setLocationSearchQuery("");
                         setLocationSuggestions([]);
                       }}
-                      className="w-full text-left p-1.5 rounded-lg hover:bg-emerald-50 text-xs font-medium text-slate-800 flex items-center gap-1.5 transition-colors"
+                      className="w-full text-left p-1.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-slate-700 text-xs font-medium text-slate-800 dark:text-slate-200 flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
-                      <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                       <span className="truncate">{item.name}</span>
                     </button>
                   ))}
                 </div>
               )}
 
-              <div className="flex items-center gap-2 text-[10px] text-slate-500">
+              <div className="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400">
                 <span>কোঅর্ডিনেটস:</span>
-                <span className="font-mono bg-slate-200 px-1.5 py-0.5 rounded text-slate-800">
+                <span className="font-mono bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">
                   {latitude.toFixed(4)}, {longitude.toFixed(4)}
                 </span>
-                <span className="text-emerald-700 font-medium">✓ ম্যাপে রিয়েল দূরত্ব মাপতে ব্যবহৃত হবে</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-medium">✓ ম্যাপে রিয়েল দূরত্ব মাপতে ব্যবহৃত হবে</span>
               </div>
             </div>
 
@@ -529,10 +525,10 @@ export default function ListBookPage() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="py-3 px-5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center gap-1 text-sm"
+                className="py-3 px-5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold flex items-center justify-center gap-1 text-sm transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                পেছনে
+                <span>পেছনে</span>
               </button>
               <button
                 type="button"
@@ -544,9 +540,9 @@ export default function ListBookPage() {
                   setError("");
                   setStep(3);
                 }}
-                className="flex-1 py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all"
+                className="flex-1 py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
               >
-                পরবর্তী ধাপ: ডিল টাইপ ও প্রাইস
+                <span>পরবর্তী ধাপ: ডিল টাইপ ও প্রাইস</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -557,11 +553,11 @@ export default function ListBookPage() {
         {step === 3 && (
           <div className="space-y-6 animate-in fade-in duration-200">
             <div>
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-emerald-600" />
-                ডিলের ধরন এবং মূল্য নির্ধারণ
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <span>ডিলের ধরন এবং মূল্য নির্ধারণ</span>
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 বইটি বিক্রি করতে চান, নাকি অন্য বইয়ের সাথে বদল (Swap) করবেন?
               </p>
             </div>
@@ -572,15 +568,15 @@ export default function ListBookPage() {
                 onClick={() => setDealType("SELL")}
                 className={`p-4 rounded-2xl border-2 cursor-pointer transition-all ${
                   dealType === "SELL"
-                    ? "border-emerald-600 bg-emerald-50/50 shadow-md shadow-emerald-600/10"
-                    : "border-slate-200 hover:border-slate-300"
+                    ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40 shadow-md shadow-emerald-600/10"
+                    : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700"
                 }`}
               >
-                <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-2 font-bold">
+                <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 flex items-center justify-center mb-2 font-bold">
                   <DollarSign className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-slate-900 text-sm">বিক্রি করব (Sell)</h4>
-                <p className="text-[11px] text-slate-500 mt-0.5">
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">বিক্রি করব (Sell)</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                   একটি নির্দিষ্ট মূল্যে বিক্রি করতে চান
                 </p>
               </div>
@@ -589,15 +585,15 @@ export default function ListBookPage() {
                 onClick={() => setDealType("SWAP")}
                 className={`p-4 rounded-2xl border-2 cursor-pointer transition-all ${
                   dealType === "SWAP"
-                    ? "border-blue-600 bg-blue-50/50 shadow-md shadow-blue-600/10"
-                    : "border-slate-200 hover:border-slate-300"
+                    ? "border-blue-600 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 shadow-md shadow-blue-600/10"
+                    : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700"
                 }`}
               >
-                <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-2 font-bold">
+                <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 flex items-center justify-center mb-2 font-bold">
                   <Repeat className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-slate-900 text-sm">বিনিময় করব (Swap)</h4>
-                <p className="text-[11px] text-slate-500 mt-0.5">
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">বিনিময় করব (Swap)</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                   অন্য কোনো বইয়ের বিনিময়ে হাতবদল
                 </p>
               </div>
@@ -606,15 +602,15 @@ export default function ListBookPage() {
                 onClick={() => setDealType("GIVEAWAY")}
                 className={`p-4 rounded-2xl border-2 cursor-pointer transition-all ${
                   dealType === "GIVEAWAY"
-                    ? "border-amber-600 bg-amber-50/50 shadow-md shadow-amber-600/10"
-                    : "border-slate-200 hover:border-slate-300"
+                    ? "border-amber-600 dark:border-amber-500 bg-amber-50/50 dark:bg-amber-950/40 shadow-md shadow-amber-600/10"
+                    : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700"
                 }`}
               >
-                <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-2 font-bold">
+                <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 flex items-center justify-center mb-2 font-bold">
                   <Gift className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-slate-900 text-sm">ফ্রি গিভঅ্যাওয়ে</h4>
-                <p className="text-[11px] text-slate-500 mt-0.5">
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">ফ্রি গিভঅ্যাওয়ে</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                   কোনো জুনিয়র বা অভাবী শিক্ষার্থীকে দান
                 </p>
               </div>
@@ -622,12 +618,12 @@ export default function ListBookPage() {
 
             {/* Price Input (Only for SELL) */}
             {dealType === "SELL" && (
-              <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200 space-y-2">
-                <label className="block text-xs font-bold text-emerald-900">
+              <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 space-y-2">
+                <label className="block text-xs font-bold text-emerald-900 dark:text-emerald-300">
                   আপনার বিক্রয়মূল্য (টাকা) *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-base">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 font-bold text-base">
                     ৳
                   </span>
                   <input
@@ -635,29 +631,29 @@ export default function ListBookPage() {
                     placeholder="যেমন: 250"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
-                    className="w-full pl-9 pr-4 py-3 rounded-xl border border-emerald-300 font-black text-lg text-slate-900 outline-hidden focus:border-emerald-600 bg-white"
+                    className="w-full pl-9 pr-4 py-3 rounded-xl border border-emerald-300 dark:border-emerald-700 font-black text-lg text-slate-900 dark:text-white outline-hidden focus:border-emerald-600 bg-white dark:bg-slate-800"
                     required
                   />
                 </div>
-                <span className="text-[11px] text-emerald-700 block">
+                <span className="text-[11px] text-emerald-700 dark:text-emerald-400 block font-medium">
                   💡 ন্যায্য মূল্য দিলে দ্রুত বিক্রি হওয়ার সম্ভাবনা বেশি থাকে।
                 </span>
               </div>
             )}
 
             {/* Summary Review Card */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
-              <div className="flex justify-between pb-2 border-b border-slate-200">
-                <span className="text-slate-500">বইয়ের নাম:</span>
-                <span className="font-bold text-slate-900">{title}</span>
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
+              <div className="flex justify-between pb-2 border-b border-slate-200 dark:border-slate-700">
+                <span className="text-slate-500 dark:text-slate-400">বইয়ের নাম:</span>
+                <span className="font-bold text-slate-900 dark:text-white">{title}</span>
               </div>
-              <div className="flex justify-between pb-2 border-b border-slate-200">
-                <span className="text-slate-500">অবস্থান:</span>
-                <span className="font-bold text-slate-900">📍 {locationName}</span>
+              <div className="flex justify-between pb-2 border-b border-slate-200 dark:border-slate-700">
+                <span className="text-slate-500 dark:text-slate-400">অবস্থান:</span>
+                <span className="font-bold text-slate-900 dark:text-white">📍 {locationName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">মোট ছবি:</span>
-                <span className="font-bold text-emerald-700">{images.length}টি ফটো প্রস্তুত</span>
+                <span className="text-slate-500 dark:text-slate-400">মোট ছবি:</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400">{images.length}টি ফটো প্রস্তুত</span>
               </div>
             </div>
 
@@ -667,16 +663,16 @@ export default function ListBookPage() {
                 type="button"
                 onClick={() => setStep(2)}
                 disabled={loading}
-                className="py-3 px-5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center gap-1 text-sm"
+                className="py-3 px-5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold flex items-center justify-center gap-1 text-sm transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                পেছনে
+                <span>পেছনে</span>
               </button>
               <button
                 type="button"
                 onClick={handlePublish}
                 disabled={loading}
-                className="flex-1 py-4 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-black text-base flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all"
+                className="flex-1 py-4 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-black text-base flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
               >
                 {loading ? (
                   <>
